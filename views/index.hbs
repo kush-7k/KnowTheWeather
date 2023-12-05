@@ -1,0 +1,238 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }}</title>  <style>
+    /* Reset some default styles */
+
+    /**
+    I HAVE TRIED A LOT TO MAKE CSS WORK FROM STYLE.CSS WHICH WAS INITIALLY IN THE PUBLIC/STYLESHEETS/STYLE.CSS 
+    HOWEVER I ALSO CHANGED THE LOCATION AND THE PATH OF THE FILE BUT STILL IT DID NOT WORKED AND THEN I HAD TO
+    MADE SURE IT SHOULD BE WROKING ANYHOW AND DOES NOT MATTER ABOUT THE LOCATION AND AT THE END I JUST PASTED ALL THE CODE 
+    FROM STYLE.CSS TO HERE
+    MY APOLOGIES
+    **/
+    body, h1, h2, h3, p, ul, li, figure, figcaption, table, th, td {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f8f8f8;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Header */
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin-bottom: 10px;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+
+    nav a, button {
+      margin-right: 10px;
+      color: #fff;
+      text-decoration: none;
+      background-color: #555;
+      padding: 5px 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Main */
+    main {
+      margin-top: 20px;
+    }
+
+    section {
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      border-radius: 8px;
+      background-color: #fff;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+
+    form {
+      margin-top: 10px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    button[type="submit"] {
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+    }
+
+    /* Responsive */
+    @media screen and (max-width: 768px) {
+      nav {
+        text-align: center;
+      }
+
+      nav a, button {
+        display: block;
+        margin: 5px auto;
+      }
+    }
+  </style>
+<script src="./public/javascripts/weather.js">
+ // Example JavaScript to enhance the user experience
+    $(document).ready(function () {
+      // Add event listener to the "Get Weather" button
+      const weatherForm = $('form[action="/weather"]');
+      weatherForm.submit(function (event) {
+        event.preventDefault(); // Prevent the form from submitting (for demonstration purposes)
+
+        // Your custom logic for handling the form submission can go here
+
+        // For demonstration, let's just log the entered city to the console
+        const cityInput = $('#city');
+        console.log('Selected City:', cityInput.val());
+      });
+
+      // Example: Highlight the table row on hover
+      $('table tbody tr').hover(
+        function () {
+          $(this).css('background-color', '#e0f7fa');
+        },
+        function () {
+          $(this).css('background-color', '');
+        }
+      );
+    });
+</script>
+</head>
+<body>
+
+
+  <header style="background-color: #64b5f6; color: #fff; padding: 20px; text-align: center;">
+    <h1 style="margin-bottom: 10px; font-size: 2em;">Weather Explorer</h1>
+    <p style="font-size: 1.2em;">Discover the latest weather conditions</p>
+     <h1 style="margin-bottom: 10px; font-size: 2em;">Welcome, {{ user.email }}!</h1>
+
+    <nav>
+      <a href="/users/logout" style="color: #fff; text-decoration: none; margin-right: 15px;">Logout</a>
+      <button onclick="window.location.href='/users/register'" style="background-color: #4caf50; color: #fff; border: none; padding: 10px 20px; cursor: pointer; font-size: 1em;">Register</button>
+    </nav>
+  </header>
+
+
+
+    {{!-- <h1>Welcome, {{ user.email }}!</h1>
+    <nav>
+      <a href="/users/logout">Logout</a>
+      <button onclick="window.location.href='/users/register'">Register</button>
+    </nav>
+  </header> --}}
+  <main class="container">
+    <section>
+      <h2>Weather Data (Read-Only)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>City</th>
+            <th>Temperature</th>
+            <th>Condition</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each weatherData}}
+            <tr>
+              <td>{{this.city}}</td>
+              <td>{{this.temperature}}</td>
+              <td>{{this.condition}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Form to enter a new city -->
+    <section>
+      <h2>Enter a City for Weather Information</h2>
+      <form action="/weather" method="GET">
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" required>
+        <button type="submit">Get Weather</button>
+      </form>
+    </section>
+    <section>
+    <img src="https://www.gizmochina.com/wp-content/uploads/2020/01/best-weather-apps-1024x555.jpg" alt="Image">
+    </section>
+  </main>
+  <footer style="background-color: #37474f; color: #fff; text-align: center; padding: 20px;">
+    <p style="font-size: 1em;">&copy; 2023 Weather Explorer. All rights reserved.</p>
+  </footer>
+
+
+</body>
+</html>
